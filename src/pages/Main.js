@@ -1,46 +1,14 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import styled from "styled-components";
 import { HiOutlineDocument } from "react-icons/hi";
 import { AiOutlineSearch } from "react-icons/ai";
-import Accordion from "./Accordion";
-
-const tempData = [
-  {
-    type: "directory",
-    title: "일상",
-  },
-  {
-    type: "directory",
-    title: "Tech",
-    children: [
-      {
-        type: "post",
-        title: "Tech1",
-      },
-      {
-        type: "post",
-        title: "Tech2",
-      },
-      {
-        type: "directory",
-        title: "Tech3",
-        children: [
-          {
-            type: "post",
-            title: "Tech31",
-          },
-          {
-            type: "post",
-            title: "Tech32",
-          },
-        ],
-      },
-    ],
-  },
-];
+import Accordion from "../components/Accordion";
+import Content from "../components/Content";
+import AppContext from "../context/AppContext";
 
 function Main() {
   const [selected, setSelected] = useState(null);
+  const { selectedPost, postData, openPost } = useContext(AppContext);
 
   const listArr = [
     {
@@ -52,8 +20,8 @@ function Main() {
             내요요요옹
           </Accordion>
           <Accordion title="VSCODE" isBold={true}>
-            {tempData.map((one) => (
-              <Content {...one} />
+            {postData.map((one, index) => (
+              <Content {...one} key={index} />
             ))}
           </Accordion>
         </>
@@ -75,6 +43,7 @@ function Main() {
             onClick={() => {
               setSelected(selected === index ? null : index);
             }}
+            key={index}
           >
             {one.icon}
           </IconWrap>
@@ -87,19 +56,11 @@ function Main() {
           {listArr[selected].content}
         </LeftContent>
       )}
+      <RightContent>
+        {JSON.stringify(openPost)}
+        {selectedPost}
+      </RightContent>
     </Wrap>
-  );
-}
-
-function Content({ type, title, children }) {
-  return type === "directory" ? (
-    <Accordion title={`📂 ${title}`}>
-      {children?.map((one) => (
-        <Content {...one} />
-      ))}
-    </Accordion>
-  ) : (
-    <div>&nbsp;&nbsp;&nbsp;&nbsp;📝 {title}</div>
   );
 }
 
@@ -121,11 +82,11 @@ const IconWrap = styled.div`
 const Wrap = styled.div`
   display: flex;
   height: 100vh;
-  background-color: #1fb1b1;
 `;
 
 const LeftBar = styled.div`
   width: 50px;
+  min-width: 50px; // flex 때문에 LeftBar가 줄어드는 현상을 방지
   height: 100%;
   background-color: #333333;
 `;
@@ -140,4 +101,9 @@ const LeftContent = styled.div`
     padding-bottom: 10px;
     color: #7a7a7a;
   }
+`;
+
+const RightContent = styled.div`
+  width: 100%;
+  background-color: #1e1e1e;
 `;
