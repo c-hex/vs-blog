@@ -4,19 +4,67 @@ import { HiOutlineDocument } from "react-icons/hi";
 import { AiOutlineSearch } from "react-icons/ai";
 import Accordion from "./Accordion";
 
-const listArr = [
+const tempData = [
   {
-    icon: <HiOutlineDocument size={28} />,
-    path: "post",
+    type: "directory",
+    title: "일상",
   },
   {
-    icon: <AiOutlineSearch size={28} />,
-    path: "search",
+    type: "directory",
+    title: "Tech",
+    children: [
+      {
+        type: "post",
+        title: "Tech1",
+      },
+      {
+        type: "post",
+        title: "Tech2",
+      },
+      {
+        type: "directory",
+        title: "Tech3",
+        children: [
+          {
+            type: "post",
+            title: "Tech31",
+          },
+          {
+            type: "post",
+            title: "Tech32",
+          },
+        ],
+      },
+    ],
   },
 ];
 
 function Main() {
   const [selected, setSelected] = useState(null);
+
+  const listArr = [
+    {
+      icon: <HiOutlineDocument size={24} />,
+      path: "EXPLORER",
+      content: (
+        <>
+          <Accordion title="OPEN POSTS" isBold={true}>
+            내요요요옹
+          </Accordion>
+          <Accordion title="VSCODE" isBold={true}>
+            {tempData.map((one) => (
+              <Content {...one} />
+            ))}
+          </Accordion>
+        </>
+      ),
+    },
+    {
+      icon: <AiOutlineSearch size={24} />,
+      path: "SEARCH",
+      content: <p>111</p>,
+    },
+  ];
 
   return (
     <Wrap>
@@ -32,12 +80,26 @@ function Main() {
           </IconWrap>
         ))}
       </LeftBar>
-      <LeftContent>
-        <p>{listArr[selected]?.path}</p>
-        {/* // ? --> istArr[selected]가 true일 때만 path를 실행 */}
-        <Accordion title="OPEN POSTS">내용내용내용</Accordion>
-      </LeftContent>
+
+      {selected !== null && listArr[selected] && (
+        <LeftContent>
+          <p>{listArr[selected].path}</p>
+          {listArr[selected].content}
+        </LeftContent>
+      )}
     </Wrap>
+  );
+}
+
+function Content({ type, title, children }) {
+  return type === "directory" ? (
+    <Accordion title={`📂 ${title}`}>
+      {children?.map((one) => (
+        <Content {...one} />
+      ))}
+    </Accordion>
+  ) : (
+    <div>&nbsp;&nbsp;&nbsp;&nbsp;📝 {title}</div>
   );
 }
 
@@ -59,7 +121,7 @@ const IconWrap = styled.div`
 const Wrap = styled.div`
   display: flex;
   height: 100vh;
-  background-color: #1e1e1e;
+  background-color: #1fb1b1;
 `;
 
 const LeftBar = styled.div`
@@ -72,9 +134,10 @@ const LeftContent = styled.div`
   width: 250px;
   height: 100%;
   background-color: #252526;
+  padding: 10px;
 
   > p {
-    padding: 15px 0 0 10px;
-    color: #fff;
+    padding-bottom: 10px;
+    color: #7a7a7a;
   }
 `;
