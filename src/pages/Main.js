@@ -1,18 +1,20 @@
 import React, { useContext, useState } from "react";
 import styled from "styled-components";
-import { HiOutlineDocument } from "react-icons/hi";
-import { AiOutlineSearch } from "react-icons/ai";
+import { VscFiles } from "react-icons/vsc";
+import { VscSearch } from "react-icons/vsc";
+import { VscClose } from "react-icons/vsc";
 import Accordion from "../components/Accordion";
 import Content from "../components/Content";
 import AppContext from "../context/AppContext";
 
 function Main() {
   const [selected, setSelected] = useState(null);
-  const { selectedPost, postData, openPost } = useContext(AppContext);
+  const { setSelectedPost, selectedPost, postData, setOpenPost, openPost } =
+    useContext(AppContext);
 
   const listArr = [
     {
-      icon: <HiOutlineDocument size={24} />,
+      icon: <VscFiles size={24} />,
       path: "EXPLORER",
       content: (
         <>
@@ -28,7 +30,7 @@ function Main() {
       ),
     },
     {
-      icon: <AiOutlineSearch size={24} />,
+      icon: <VscSearch size={24} />,
       path: "SEARCH",
       content: <p>111</p>,
     },
@@ -56,12 +58,13 @@ function Main() {
           {listArr[selected].content}
         </LeftContent>
       )}
-      <RightContent selected={selected}>
-        <div>
-          {openPost.map((one) => {
+
+      <RightWrap selected={selected}>
+        <RigthHeader>
+          {openPost.map((one, index) => {
             const pathArr = one.split("/").filter(Boolean);
 
-            const data = postData.reduce((sum, current, index) => {
+            const data = pathArr.reduce((sum, current, index) => {
               const lastPath = pathArr.length - 1 === index;
 
               const target = sum.find(
@@ -70,20 +73,90 @@ function Main() {
                   one.type === (lastPath ? "post" : "directory")
               );
 
-              return sum.children.find[(one) => current];
+              return lastPath ? target : target?.children;
             }, postData);
 
-            return <div>{one}</div>;
-          })}
-        </div>
+            return (
+              <div
+                class={selectedPost === one ? "selected" : ""}
+                onClick={() => {
+                  setSelectedPost(data.path);
+                }}
+                key={index}
+              >
+                📝 {data.title}
+                <span
+                  onClick={(e) => {
+                    e.stopPropagation();
 
-        {selectedPost}
-      </RightContent>
+                    const openPostFilter = openPost.filter(
+                      (one) => one !== data.path
+                    );
+                    setOpenPost(openPostFilter);
+
+                    setSelectedPost(
+                      openPostFilter.length !== 0 ? openPostFilter[0] : null
+                    );
+                  }}
+                >
+                  <VscClose />
+                </span>
+              </div>
+            );
+          })}
+        </RigthHeader>
+        <RightContent selected={selected}>{selectedPost}</RightContent>
+      </RightWrap>
     </Wrap>
   );
 }
 
 export default Main;
+
+const RightWrap = styled.div`
+  width: ${({ selected }) =>
+    selected === null ? "calc(100% - 40px)" : "calc(100% - 250px - 50px)"};
+
+  @media (max-width: 540px) {
+    display: ${({ selected }) => (selected === null ? "block" : "none")};
+  }
+`;
+
+const RigthHeader = styled.div`
+  width: 100%;
+  height: 50px;
+  display: flex;
+  overflow-x: scroll;
+  background-color: #252526;
+
+  > div {
+    width: 150px;
+    padding: 10px;
+    background-color: #252526;
+    min-width: 150px;
+    position: relative;
+    cursor: pointer;
+
+    &.selected {
+      background-color: #1e1e1e;
+    }
+
+    > span {
+      position: absolute;
+      right: 15px;
+      top: 10px;
+    }
+  }
+`;
+
+const RightContent = styled.div`
+  width: 100%;
+  height: calc(100% - 50px);
+  background-color: #1e1e1e;
+
+  > div:first-child {
+  }
+`;
 
 const IconWrap = styled.div`
   display: flex;
@@ -124,24 +197,5 @@ const LeftContent = styled.div`
 
   @media (max-width: 540px) {
     width: 100%;
-  }
-`;
-
-const RightContent = styled.div`
-  width: 100%;
-  background-color: #1e1e1e;
-
-  @media (max-width: 540px) {
-    display: ${({ selected }) => (selected === null ? "block" : "none")};
-  }
-
-  > div:first-child {
-    display: flex;
-
-    > div {
-      width: 150px;
-      padding: 5px 10px;
-      background-color: #252526;
-    }
   }
 `;

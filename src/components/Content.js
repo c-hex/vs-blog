@@ -6,7 +6,7 @@ function Content({ type, title, children, path }) {
   const { setSelectedPost, openPost, setOpenPost } = useContext(AppContext);
 
   function selectedFunction() {
-    setSelectedPost(title);
+    setSelectedPost(path);
 
     if (!openPost.includes(path)) {
       setOpenPost([...openPost, path]);
