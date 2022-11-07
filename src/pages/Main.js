@@ -56,8 +56,27 @@ function Main() {
           {listArr[selected].content}
         </LeftContent>
       )}
-      <RightContent>
-        {JSON.stringify(openPost)}
+      <RightContent selected={selected}>
+        <div>
+          {openPost.map((one) => {
+            const pathArr = one.split("/").filter(Boolean);
+
+            const data = postData.reduce((sum, current, index) => {
+              const lastPath = pathArr.length - 1 === index;
+
+              const target = sum.find(
+                (one) =>
+                  one.title === current &&
+                  one.type === (lastPath ? "post" : "directory")
+              );
+
+              return sum.children.find[(one) => current];
+            }, postData);
+
+            return <div>{one}</div>;
+          })}
+        </div>
+
         {selectedPost}
       </RightContent>
     </Wrap>
@@ -93,6 +112,7 @@ const LeftBar = styled.div`
 
 const LeftContent = styled.div`
   width: 250px;
+  min-width: 250px;
   height: 100%;
   background-color: #252526;
   padding: 10px;
@@ -101,9 +121,27 @@ const LeftContent = styled.div`
     padding-bottom: 10px;
     color: #7a7a7a;
   }
+
+  @media (max-width: 540px) {
+    width: 100%;
+  }
 `;
 
 const RightContent = styled.div`
   width: 100%;
   background-color: #1e1e1e;
+
+  @media (max-width: 540px) {
+    display: ${({ selected }) => (selected === null ? "block" : "none")};
+  }
+
+  > div:first-child {
+    display: flex;
+
+    > div {
+      width: 150px;
+      padding: 5px 10px;
+      background-color: #252526;
+    }
+  }
 `;
