@@ -1,10 +1,12 @@
 export const darkTheme = {
   color: {
-    primary: "green",
-    secondary: "orange",
-    third: "blue",
+    primary: "#1e1e1e",
+    secondary: "#252526",
+    third: "#333",
 
-    selected: "pink",
-    hover: "red",
+    selected: "#505050",
+    hover: "#3c3c3c",
+
+    text: "#fff",
   },
 };

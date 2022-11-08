@@ -8,7 +8,7 @@ export const GlobalStyle = createGlobalStyle`
 }
 
 *:not(svg, path) {
-  color: #fff;
+  color: ${({ theme }) => theme.color.text};
 }
 
 *::-webkit-scrollbar {

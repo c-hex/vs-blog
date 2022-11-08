@@ -29,7 +29,6 @@ export default Accordion;
 const AccordionWrap = styled.div`
   display: flex;
   align-items: center;
-  color: #fff;
   font-weight: bold;
   font-size: 0.8rem;
   padding: 2px 0;
