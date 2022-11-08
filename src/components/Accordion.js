@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { VscChevronRight, VscChevronDown } from "react-icons/vsc";
 
-function Accordion({ title, children, isBold }) {
-  const [expanded, setExpanded] = useState(false);
+function Accordion({ title, children, isBold, initialExpanded }) {
+  const [expanded, setExpanded] = useState(initialExpanded || false);
 
   return (
     <>

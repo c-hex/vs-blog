@@ -1,4 +1,7 @@
-* {
+import { createGlobalStyle } from "styled-components";
+
+export const GlobalStyle = createGlobalStyle`
+    * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
@@ -14,13 +17,13 @@
 
 *::-webkit-scrollbar-thumb {
   height: 10%; /* 스크롤바의 길이 */
-  background: #464646; /* 스크롤바의 색상 */
+  background: ${({ theme }) => theme.color.secondary}; /* 스크롤바의 색상 */
 
   border-radius: 10px;
 }
 
 *::-webkit-scrollbar-track {
-  background: #1e1e1e;
+  background: ${({ theme }) => theme.color.primary};
 }
 
 body {
@@ -36,3 +39,5 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
+
+`;
