@@ -123,7 +123,31 @@ function Main() {
           })}
         </RightHeader>
 
-        <RightContent selected={selected}>{selectedPost}</RightContent>
+        <RightContent selected={selected}>
+          {(() => {
+            const data = getPostOne(postData, selectedPost);
+
+            return (
+              data && (
+                <>
+                  <p>{data.path}</p>
+                  <div>
+                    <h1>{data.title}</h1>
+                    <p>
+                      <strong>Chae Yeon</strong> | {data?.data?.date}
+                    </p>
+                    <div>
+                      {data.data?.tag.map((one, index) => (
+                        <span key={index}>{one}</span>
+                      ))}
+                    </div>
+                    <div>{data.data?.content}</div>
+                  </div>
+                </>
+              )
+            );
+          })()}
+        </RightContent>
       </RightWrap>
     </Wrap>
   );
@@ -187,8 +211,40 @@ const RightContent = styled.div`
   width: 100%;
   height: calc(100% - 45px);
   background-color: ${({ theme }) => theme.color.primary};
+  padding: 10px 20px;
 
-  > div:first-child {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  > p {
+    width: 100%;
+    color: #7a7a7a;
+  }
+
+  > div {
+    width: 100%;
+    max-width: 600px;
+    > h1 {
+      padding: 30px 0 10px 0;
+    }
+
+    > p {
+      padding-bottom: 10px;
+      margin-bottom: 10px;
+      color: #7a7a7a;
+      border-bottom: 1px solid ${({ theme }) => theme.color.selected};
+    }
+
+    > div:nth-child(3) {
+      padding: 10px 0 20px 0;
+      > span {
+        padding: 5px 10px;
+        margin-right: 10px;
+        border-radius: 10px;
+        background-color: ${({ theme }) => theme.color.selected};
+      }
+    }
   }
 `;
 
