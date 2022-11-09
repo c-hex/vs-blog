@@ -8,7 +8,7 @@ import Main from "./pages/Main";
 import AppContext from "./context/AppContext";
 import { useEffect, useState } from "react";
 import { ThemeProvider } from "styled-components";
-import { darkTheme } from "./style/theme";
+import { darkTheme, lightTheme } from "./style/theme";
 import { GlobalStyle } from "./style/GlobalStyle";
 
 const router = createBrowserRouter(
@@ -24,6 +24,7 @@ function App() {
   const [selectedPost, setSelectedPost] = useState("");
   const [postData, setPostData] = useState([]);
   const [openPost, setOpenPost] = useState([]);
+  const [theme, setTheme] = useState("dark");
 
   useEffect(() => {
     setPostData([
@@ -71,12 +72,17 @@ function App() {
       value={{
         selectedPost,
         setSelectedPost,
+
         openPost,
         setOpenPost,
+
         postData,
+
+        theme,
+        setTheme,
       }}
     >
-      <ThemeProvider theme={darkTheme}>
+      <ThemeProvider theme={theme === "dark" ? darkTheme : lightTheme}>
         <GlobalStyle />
         <RouterProvider router={router} />
       </ThemeProvider>
