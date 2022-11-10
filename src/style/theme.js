@@ -15,15 +15,15 @@ export const darkTheme = {
 
 export const lightTheme = {
   color: {
-    primary: "#E2D784",
-    secondary: "#062C30",
-    third: "#05595B",
+    primary: "#F0F0DB",
+    secondary: "#21222E",
+    third: "#133e52",
 
-    selected: "#b5ad74",
-    hover: "#807c60",
+    selected: "#8a8a7b",
+    hover: "#6b6b5e",
 
     text: "#fff",
     postText: "#000",
-    postDate: "#707070",
+    postDate: "#808080",
   },
 };

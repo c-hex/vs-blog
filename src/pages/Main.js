@@ -8,6 +8,8 @@ import Content from "../components/Content";
 import AppContext from "../context/AppContext";
 import { getPostOne } from "../common/common.function";
 import PostWrap from "../components/PostWrap";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 
 function Main() {
   const [selected, setSelected] = useState(null);
@@ -140,11 +142,16 @@ function Main() {
                       <strong>Chae Yeon</strong> | {data?.data?.date}
                     </p>
                     <div>
-                      {data.data?.tag.map((one, index) => (
+                      {data.data?.tag?.map((one, index) => (
                         <span key={index}>{one}</span>
                       ))}
                     </div>
-                    <div>{data.data?.content}</div>
+                    <div>
+                      <ReactMarkdown
+                        children={data.data?.content}
+                        remarkPlugins={[remarkGfm]}
+                      />
+                    </div>
                   </div>
                 </>
               )
@@ -278,6 +285,7 @@ const Wrap = styled.div`
 `;
 
 const LeftBar = styled.div`
+  padding-top: 7px;
   width: 50px;
   min-width: 50px; // flex 때문에 LeftBar가 줄어드는 현상을 방지
   height: 100%;
@@ -294,8 +302,8 @@ const LeftBar = styled.div`
     flex-direction: column;
 
     > div {
-      height: 50px;
-      width: 30px;
+      height: 45px;
+      width: 25px;
       /* border: 1px solid ${({ theme }) => theme.color.text}; */
       background-color: ${({ theme }) => theme.color.secondary};
       border-radius: 50px;
@@ -306,10 +314,10 @@ const LeftBar = styled.div`
         content: "";
         position: absolute;
         top: 4px;
-        left: 3.3px;
+        left: 3px;
 
-        width: 24px;
-        height: 24px;
+        width: 19px;
+        height: 19px;
         border-radius: 20px;
         background-color: ${({ theme }) => theme.color.selected};
         transition: 0.3s;
