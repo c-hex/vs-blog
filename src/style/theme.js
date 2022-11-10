@@ -8,6 +8,8 @@ export const darkTheme = {
     hover: "#3c3c3c",
 
     text: "#fff",
+    postText: "#fff",
+    postDate: "#7a7a7a",
   },
 };
 
@@ -21,5 +23,7 @@ export const lightTheme = {
     hover: "#807c60",
 
     text: "#fff",
+    postText: "#000",
+    postDate: "#707070",
   },
 };

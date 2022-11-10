@@ -90,7 +90,7 @@ function Main() {
       )}
 
       <RightWrap selected={selected}>
-        <RightHeader>
+        <RightHeader visible={openPost.length !== 0 ? true : false}>
           {openPost.map((one, index) => {
             const data = getPostOne(postData, one);
 
@@ -123,7 +123,10 @@ function Main() {
           })}
         </RightHeader>
 
-        <RightContent selected={selected}>
+        <RightContent
+          selected={selected}
+          visible={openPost.length !== 0 ? true : false}
+        >
           {(() => {
             const data = getPostOne(postData, selectedPost);
 
@@ -167,7 +170,7 @@ const RightWrap = styled.div`
 const RightHeader = styled.div`
   width: 100%;
   height: 45px;
-  display: flex;
+  display: ${({ visible }) => (visible ? "flex" : "none")};
   overflow-x: scroll;
   background-color: ${({ theme }) => theme.color.secondary};
 
@@ -189,6 +192,7 @@ const RightHeader = styled.div`
 
     &.selected {
       background-color: ${({ theme }) => theme.color.primary};
+      color: ${({ theme }) => theme.color.postText};
     }
 
     &:not(.selected) > span {
@@ -209,7 +213,7 @@ const RightHeader = styled.div`
 
 const RightContent = styled.div`
   width: 100%;
-  height: calc(100% - 45px);
+  height: ${({ visible }) => (visible ? "calc(100% - 45px)" : "100%")};
   background-color: ${({ theme }) => theme.color.primary};
   padding: 10px 20px;
 
@@ -225,15 +229,21 @@ const RightContent = styled.div`
   > div {
     width: 100%;
     max-width: 600px;
+    > div {
+      color: ${({ theme }) => theme.color.postText};
+    }
     > h1 {
       padding: 30px 0 10px 0;
+      color: ${({ theme }) => theme.color.postText};
     }
 
     > p {
       padding-bottom: 10px;
       margin-bottom: 10px;
-      color: #7a7a7a;
-      border-bottom: 1px solid ${({ theme }) => theme.color.selected};
+      color: ${({ theme }) => theme.color.postDate};
+      > strong {
+        color: ${({ theme }) => theme.color.postDate};
+      }
     }
 
     > div:nth-child(3) {
@@ -287,7 +297,7 @@ const LeftBar = styled.div`
       height: 50px;
       width: 30px;
       /* border: 1px solid ${({ theme }) => theme.color.text}; */
-      background-color: #062c30;
+      background-color: ${({ theme }) => theme.color.secondary};
       border-radius: 50px;
       position: relative;
       cursor: pointer;
@@ -301,8 +311,7 @@ const LeftBar = styled.div`
         width: 24px;
         height: 24px;
         border-radius: 20px;
-        /* background-color: ${({ theme }) => theme.color.selected}; */
-        background-color: #e2d784;
+        background-color: ${({ theme }) => theme.color.selected};
         transition: 0.3s;
       }
       &.light::after {
