@@ -3,13 +3,17 @@ import styled from "styled-components";
 import { VscFiles } from "react-icons/vsc";
 import { VscSearch } from "react-icons/vsc";
 import { VscClose } from "react-icons/vsc";
+import ReactMarkdown from "react-markdown";
+import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
+import { nightOwl } from "react-syntax-highlighter/dist/esm/styles/prism";
+
 import Accordion from "../components/Accordion";
 import Content from "../components/Content";
 import AppContext from "../context/AppContext";
 import { getPostOne } from "../common/common.function";
 import PostWrap from "../components/PostWrap";
-import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import Search from "./Search";
 
 function Main() {
   const [selected, setSelected] = useState(null);
@@ -53,7 +57,7 @@ function Main() {
     {
       icon: <VscSearch size={24} />,
       path: "SEARCH",
-      content: <p>111</p>,
+      content: <Search />,
     },
   ];
 
@@ -146,10 +150,36 @@ function Main() {
                         <span key={index}>{one}</span>
                       ))}
                     </div>
-                    <div>
+                    <div className="markdown">
                       <ReactMarkdown
                         children={data.data?.content}
                         remarkPlugins={[remarkGfm]}
+                        components={{
+                          code({
+                            node,
+                            inline,
+                            className,
+                            children,
+                            ...props
+                          }) {
+                            const match = /language-(\w+)/.exec(
+                              className || ""
+                            );
+                            return !inline && match ? (
+                              <SyntaxHighlighter
+                                children={String(children).replace(/\n$/, "")}
+                                style={nightOwl}
+                                language={match[1]}
+                                PreTag="div"
+                                {...props}
+                              />
+                            ) : (
+                              <code className={className} {...props}>
+                                {children}
+                              </code>
+                            );
+                          },
+                        }}
                       />
                     </div>
                   </div>
@@ -227,6 +257,7 @@ const RightContent = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  overflow-y: scroll;
 
   > p {
     width: 100%;
@@ -260,6 +291,16 @@ const RightContent = styled.div`
         margin-right: 10px;
         border-radius: 10px;
         background-color: ${({ theme }) => theme.color.selected};
+      }
+    }
+
+    > div:last-child.markdown {
+      * {
+        color: ${({ theme }) => theme.color.postText};
+      }
+      h1 {
+        color: hotpink;
+        padding: 10px 0 30px 0;
       }
     }
   }
