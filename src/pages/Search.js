@@ -1,8 +1,11 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
 import Accordion from "../components/Accordion";
+import AppContext from "../context/AppContext";
 
 function Search() {
+  const { postData } = useContext(AppContext);
+
   const [tagData, setTagData] = useState([
     {
       tagTitle: "Tech",
@@ -25,6 +28,41 @@ function Search() {
       postArr: [],
     },
   ]);
+
+  useEffect(() => {
+    const tempArr = [];
+
+    searchTagFnc(postData);
+
+    // 태그 데이터 뽑은 함수
+    function searchTagFnc(nowPostDataArr) {
+      //
+      nowPostDataArr.map((nowPostData) => {
+        if (nowPostData.type === "post") {
+          // 게시물일 경우 처리
+          nowPostData.data.tag?.map((tag) => {
+            // 임시 데이터에 태그가 존재하는지 검사
+            const tempTarget = tempArr.find((temp) => tag === temp.tagTitle);
+
+            if (tempTarget) {
+              tempTarget.count += 1;
+            } else {
+              tempArr.push({
+                tagTitle: tag,
+                count: 1,
+                postArr: [],
+              });
+            }
+          });
+        } else {
+          // 디렉토리일 경우 처리
+          nowPostData.children && searchTagFnc(nowPostData.children);
+        }
+      });
+    }
+
+    setTagData(tempArr);
+  }, []);
 
   return (
     // initialExpanded={ture} <- true 생략 가능
