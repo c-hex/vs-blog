@@ -267,6 +267,7 @@ const RightContent = styled.div`
   > div {
     width: 100%;
     max-width: 600px;
+
     > div {
       color: ${({ theme }) => theme.color.postText};
     }
@@ -285,7 +286,8 @@ const RightContent = styled.div`
     }
 
     > div:nth-child(3) {
-      padding: 10px 0 20px 0;
+      padding: 10px 0 30px 0;
+      border-bottom: 1px solid #7a7a7a;
       > span {
         padding: 5px 10px;
         margin-right: 10px;
@@ -300,7 +302,7 @@ const RightContent = styled.div`
       }
       h1 {
         color: hotpink;
-        padding: 10px 0 30px 0;
+        padding: 20px 0 30px 0;
       }
     }
   }
