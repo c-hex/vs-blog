@@ -23,6 +23,7 @@ const router = createBrowserRouter(
 
 function App() {
   const [selectedPost, setSelectedPost] = useState("");
+  const [selectedTag, setSelectedTag] = useState(null);
   const [postData, setPostData] = useState([]);
   const [openPost, setOpenPost] = useState([]);
   const [theme, setTheme] = useState("dark");
@@ -52,6 +53,9 @@ function App() {
 
         theme,
         setTheme,
+
+        selectedTag,
+        setSelectedTag,
       }}
     >
       <ThemeProvider theme={theme === "dark" ? darkTheme : lightTheme}>

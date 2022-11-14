@@ -25,6 +25,7 @@ function Main() {
     selectedPost,
     postData,
     openPost,
+    selectedTag,
   } = useContext(AppContext);
   const listArr = [
     {
@@ -61,6 +62,7 @@ function Main() {
     },
   ];
 
+  const data = getPostOne(postData, selectedPost);
   return (
     <Wrap>
       <LeftBar>
@@ -96,54 +98,54 @@ function Main() {
       )}
 
       <RightWrap selected={selected}>
-        <RightHeader visible={openPost.length !== 0 ? true : false}>
-          {openPost.map((one, index) => {
-            const data = getPostOne(postData, one);
+        {selectedTag ? (
+          <RightTagContent>{JSON.stringify(selectedTag)}</RightTagContent>
+        ) : (
+          <>
+            <RightHeader visible={openPost.length !== 0 ? true : false}>
+              {openPost.map((one, index) => {
+                const data = getPostOne(postData, one);
 
-            return (
-              <div
-                className={selectedPost === one ? "selected" : ""}
-                onClick={() => {
-                  setSelectedPost(data.path);
-                }}
-                key={index}
-              >
-                📝{data.title}
-                <span
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    const openPostFilter = openPost.filter(
-                      (one) => one !== data.path
-                    );
-                    setOpenPost(openPostFilter);
+                return (
+                  <div
+                    className={selectedPost === one ? "selected" : ""}
+                    onClick={() => {
+                      setSelectedPost(data.path);
+                    }}
+                    key={index}
+                  >
+                    📝{data.title}
+                    <span
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        const openPostFilter = openPost.filter(
+                          (one) => one !== data.path
+                        );
+                        setOpenPost(openPostFilter);
 
-                    setSelectedPost(
-                      openPostFilter.length !== 0 ? openPostFilter[0] : null
-                    );
-                  }}
-                >
-                  <VscClose size={16.5} />
-                </span>
-              </div>
-            );
-          })}
-        </RightHeader>
+                        setSelectedPost(
+                          openPostFilter.length !== 0 ? openPostFilter[0] : null
+                        );
+                      }}
+                    >
+                      <VscClose size={16.5} />
+                    </span>
+                  </div>
+                );
+              })}
+            </RightHeader>
 
-        <RightContent
-          selected={selected}
-          visible={openPost.length !== 0 ? true : false}
-        >
-          {(() => {
-            const data = getPostOne(postData, selectedPost);
-
-            return (
-              data && (
+            <RightTagContent
+              selected={selected}
+              visible={openPost.length !== 0 ? true : false}
+            >
+              {data && (
                 <>
                   <p>{data.path}</p>
                   <div>
                     <h1>{data.title}</h1>
                     <p>
-                      <strong>Chae Yeon</strong> | {data?.data?.date}
+                      <strong>ChaeYeon Ryu</strong> | {data?.data?.date}
                     </p>
                     <div>
                       {data.data?.tag?.map((one, index) => (
@@ -184,10 +186,10 @@ function Main() {
                     </div>
                   </div>
                 </>
-              )
-            );
-          })()}
-        </RightContent>
+              )}
+            </RightTagContent>
+          </>
+        )}
       </RightWrap>
     </Wrap>
   );
@@ -248,9 +250,9 @@ const RightHeader = styled.div`
   }
 `;
 
-const RightContent = styled.div`
+const RightTagContent = styled.div`
   width: 100%;
-  height: ${({ visible }) => (visible ? "calc(100% - 45px)" : "100%")};
+  height: 100%;
   background-color: ${({ theme }) => theme.color.primary};
   padding: 10px 20px;
 
@@ -258,54 +260,6 @@ const RightContent = styled.div`
   flex-direction: column;
   align-items: center;
   overflow-y: scroll;
-
-  > p {
-    width: 100%;
-    color: #7a7a7a;
-  }
-
-  > div {
-    width: 100%;
-    max-width: 600px;
-
-    > div {
-      color: ${({ theme }) => theme.color.postText};
-    }
-    > h1 {
-      padding: 30px 0 10px 0;
-      color: ${({ theme }) => theme.color.postText};
-    }
-
-    > p {
-      padding-bottom: 10px;
-      margin-bottom: 10px;
-      color: ${({ theme }) => theme.color.postDate};
-      > strong {
-        color: ${({ theme }) => theme.color.postDate};
-      }
-    }
-
-    > div:nth-child(3) {
-      padding: 10px 0 30px 0;
-      border-bottom: 1px solid #7a7a7a;
-      > span {
-        padding: 5px 10px;
-        margin-right: 10px;
-        border-radius: 10px;
-        background-color: ${({ theme }) => theme.color.selected};
-      }
-    }
-
-    > div:last-child.markdown {
-      * {
-        color: ${({ theme }) => theme.color.postText};
-      }
-      h1 {
-        color: hotpink;
-        padding: 20px 0 30px 0;
-      }
-    }
-  }
 `;
 
 const IconWrap = styled.div`

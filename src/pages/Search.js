@@ -4,30 +4,9 @@ import Accordion from "../components/Accordion";
 import AppContext from "../context/AppContext";
 
 function Search() {
-  const { postData } = useContext(AppContext);
+  const { postData, setSelectedTag } = useContext(AppContext);
 
-  const [tagData, setTagData] = useState([
-    {
-      tagTitle: "Tech",
-      count: 3,
-      postArr: [],
-    },
-    {
-      tagTitle: "일상",
-      count: 3,
-      postArr: [],
-    },
-    {
-      tagTitle: "일상",
-      count: 3,
-      postArr: [],
-    },
-    {
-      tagTitle: "일상",
-      count: 3,
-      postArr: [],
-    },
-  ]);
+  const [tagData, setTagData] = useState([]);
 
   useEffect(() => {
     const tempArr = [];
@@ -46,11 +25,14 @@ function Search() {
 
             if (tempTarget) {
               tempTarget.count += 1;
+              tempTarget.postArr.push(nowPostData.path);
+
+              tempTarget.postArr = [...new Set(tempTarget.postArr)];
             } else {
               tempArr.push({
                 tagTitle: tag,
                 count: 1,
-                postArr: [],
+                postArr: [nowPostData.path],
               });
             }
           });
@@ -61,15 +43,24 @@ function Search() {
       });
     }
 
+    console.log(tempArr);
     setTagData(tempArr);
-  }, []);
+  }, [postData]);
 
   return (
     // initialExpanded={ture} <- true 생략 가능
     <Accordion title="Tags" initialExpanded isBold>
       <TagWrap>
         {tagData.map((one, index) => (
-          <Tag key={index}>
+          <Tag
+            key={index}
+            onClick={() => {
+              setSelectedTag({
+                tagTitle: one.tagTitle,
+                path: [],
+              });
+            }}
+          >
             {one.tagTitle} <span>{one.count}</span>
           </Tag>
         ))}
