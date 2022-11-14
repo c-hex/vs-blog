@@ -99,7 +99,19 @@ function Main() {
 
       <RightWrap selected={selected}>
         {selectedTag ? (
-          <RightTagContent>{JSON.stringify(selectedTag)}</RightTagContent>
+          <RightTagContent>
+            <h2>
+              {selectedTag.tagTitle} 관련 글 목록{" "}
+              <span>({selectedTag.path.length}개)</span>
+            </h2>
+            <div>
+              {selectedTag.path.map((path) => {
+                const tagData = getPostOne(postData, path);
+
+                return <div>{tagData.title}</div>;
+              })}
+            </div>
+          </RightTagContent>
         ) : (
           <>
             <RightHeader visible={openPost.length !== 0 ? true : false}>
