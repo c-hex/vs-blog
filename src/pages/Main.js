@@ -334,7 +334,7 @@ const RightTagContent = styled.div`
             width: 50px;
             height: 50px;
             /* background-color: ${({ theme }) => theme.color.selected}; */
-            background-color: red;
+            background-color: orange;
             border-radius: 5px;
 
             overflow: hidden;
