@@ -18,7 +18,7 @@ export const GlobalStyle = createGlobalStyle`
 
 *::-webkit-scrollbar-thumb {
   height: 20%; /* 스크롤바의 길이 */
-  width: 5px;
+  width: 3px;
   background: ${({ theme }) => theme.color.third}; /* 스크롤바의 색상 */
 
   border-radius: 10px;

@@ -3,11 +3,17 @@ import styled from "styled-components";
 import AppContext from "../context/AppContext";
 
 function PostWrap({ path, title, isClose }) {
-  const { selectedPost, setSelectedPost, openPost, setOpenPost } =
-    useContext(AppContext);
+  const {
+    setSelectedTag,
+    selectedPost,
+    setSelectedPost,
+    openPost,
+    setOpenPost,
+  } = useContext(AppContext);
 
   function selectedFunction() {
     setSelectedPost(path);
+    setSelectedTag(null);
 
     if (!openPost.includes(path)) {
       setOpenPost([...openPost, path]);

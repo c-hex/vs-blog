@@ -26,6 +26,7 @@ function Main() {
     postData,
     openPost,
     selectedTag,
+    setSelectedTag,
   } = useContext(AppContext);
   const listArr = [
     {
@@ -103,18 +104,37 @@ function Main() {
             <div>
               <h2>
                 {selectedTag.tagTitle} 관련 글 목록
-                <span>({selectedTag.path.length} 개)</span>
+                <span>({selectedTag.path.length}개)</span>
               </h2>
               <div>
-                {selectedTag.path.map((path) => {
+                {selectedTag.path.map((path, index) => {
                   const tagData = getPostOne(postData, path);
                   return (
-                    <div>
+                    <div
+                      key={index}
+                      className="post"
+                      onClick={() => {
+                        setSelectedPost(tagData.path);
+                        setSelectedTag(null);
+
+                        if (!openPost.includes(path)) {
+                          setOpenPost([...openPost, path]);
+                        }
+                      }}
+                    >
                       <div>
-                        <div></div>
+                        <div>
+                          {tagData.data.thumnail && (
+                            <img src={tagData.data.thumnail} alt="" />
+                          )}
+                        </div>
                         <h3>{tagData.title}</h3>
                       </div>
-                      <div></div>
+                      <div>
+                        {tagData.data.tag.map((one) => (
+                          <span key={index}>{one}</span>
+                        ))}
+                      </div>
                     </div>
                   );
                 })}
@@ -135,7 +155,7 @@ function Main() {
                     }}
                     key={index}
                   >
-                    📝{data.title}
+                    📝 {data.title}
                     <span
                       onClick={(e) => {
                         e.stopPropagation();
@@ -156,7 +176,7 @@ function Main() {
               })}
             </RightHeader>
 
-            <RightTagContent
+            <RightContent
               selected={selected}
               visible={openPost.length !== 0 ? true : false}
             >
@@ -208,7 +228,7 @@ function Main() {
                   </div>
                 </>
               )}
-            </RightTagContent>
+            </RightContent>
           </>
         )}
       </RightWrap>
@@ -274,7 +294,7 @@ const RightHeader = styled.div`
 const RightTagContent = styled.div`
   background-color: ${({ theme }) => theme.color.primary};
   width: 100%;
-  height: ${({ visible }) => (visible ? "calc(100% - 45px)" : "100%")};
+  height: ${({ visible }) => (visible ? "calc(100% - 50px)" : "100%")};
   padding: 10px 20px;
 
   display: flex;
@@ -287,10 +307,130 @@ const RightTagContent = styled.div`
     width: 100%;
     max-width: 700px;
     > h2 {
-      border-bottom: 2px solid ${({ theme }) => theme.color.postText};
+      border-bottom: 2px solid ${({ theme }) => theme.color.selected};
       padding: 30px 0 10px 0;
+      color: ${({ theme }) => theme.color.postText};
       > span {
         font-size: 1.2rem;
+        color: ${({ theme }) => theme.color.postDate};
+      }
+    }
+    > div {
+      > div.post {
+        padding: 10px;
+        margin-top: 20px;
+        border-radius: 10px;
+        background-color: ${({ theme }) => theme.color.third};
+        cursor: pointer;
+
+        &:hover {
+          background-color: ${({ theme }) => theme.color.secondary};
+          transform: scale(1.01);
+          transition: 0.2s;
+        }
+        > div:first-child {
+          display: flex;
+          > div {
+            width: 50px;
+            height: 50px;
+            /* background-color: ${({ theme }) => theme.color.selected}; */
+            background-color: red;
+            border-radius: 5px;
+
+            overflow: hidden;
+
+            > img {
+              width: 100%;
+              height: 100%;
+
+              object-fit: cover;
+            }
+          }
+          > h3 {
+            padding-left: 10px;
+          }
+        }
+        > div:last-child {
+          padding-top: 5px;
+          > span {
+            display: inline-block;
+            padding: 3.5px 10px;
+            border-radius: 7px;
+            margin-right: 10px;
+            color: ${({ theme }) => theme.color.text};
+            background-color: ${({ theme }) => theme.color.selected};
+          }
+          span:hover {
+            text-decoration: underline;
+            cursor: pointer;
+            color: ${({ theme }) => theme.color.third};
+          }
+        }
+      }
+    }
+  }
+`;
+
+const RightContent = styled.div`
+  background-color: ${({ theme }) => theme.color.primary};
+  width: 100%;
+  height: ${({ visible }) => (visible ? "calc(100% - 45px)" : "100%")};
+  padding: 10px 20px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  overflow-y: scroll;
+
+  strong {
+    color: ${({ theme }) => theme.color.postDate};
+  }
+
+  > p {
+    width: 100%;
+    color: ${({ theme }) => theme.color.postDate};
+  }
+  > div {
+    width: 100%;
+    max-width: 600px;
+    > h1 {
+      color: ${({ theme }) => theme.color.postText};
+      padding: 10px 0 20px 0;
+    }
+
+    > p {
+      padding-bottom: 10px;
+      color: ${({ theme }) => theme.color.postDate};
+      padding-bottom: 30px;
+      border-bottom: 2px solid ${({ theme }) => theme.color.selected};
+    }
+    > div:nth-child(3) {
+      padding: 30px 0 20px 0;
+      > span {
+        padding: 5px 10px;
+        margin-right: 10px;
+        border-radius: 10px;
+        background-color: ${({ theme }) => theme.color.secondary};
+      }
+    }
+    > div:last-child.markdown {
+      h1 {
+        color: orange;
+        padding: 10px 0 30px 0;
+      }
+      p {
+        color: ${({ theme }) => theme.color.postText};
+      }
+      h2,
+      h3,
+      h4,
+      h5 {
+        padding: 15px 0;
+        color: ${({ theme }) => theme.color.postText};
+      }
+
+      strong {
         color: ${({ theme }) => theme.color.postText};
       }
     }
