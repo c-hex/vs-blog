@@ -100,16 +100,25 @@ function Main() {
       <RightWrap selected={selected}>
         {selectedTag ? (
           <RightTagContent>
-            <h2>
-              {selectedTag.tagTitle} 관련 글 목록{" "}
-              <span>({selectedTag.path.length}개)</span>
-            </h2>
             <div>
-              {selectedTag.path.map((path) => {
-                const tagData = getPostOne(postData, path);
-
-                return <div>{tagData.title}</div>;
-              })}
+              <h2>
+                {selectedTag.tagTitle} 관련 글 목록
+                <span>({selectedTag.path.length} 개)</span>
+              </h2>
+              <div>
+                {selectedTag.path.map((path) => {
+                  const tagData = getPostOne(postData, path);
+                  return (
+                    <div>
+                      <div>
+                        <div></div>
+                        <h3>{tagData.title}</h3>
+                      </div>
+                      <div></div>
+                    </div>
+                  );
+                })}
+              </div>
             </div>
           </RightTagContent>
         ) : (
@@ -263,15 +272,29 @@ const RightHeader = styled.div`
 `;
 
 const RightTagContent = styled.div`
-  width: 100%;
-  height: 100%;
   background-color: ${({ theme }) => theme.color.primary};
+  width: 100%;
+  height: ${({ visible }) => (visible ? "calc(100% - 45px)" : "100%")};
   padding: 10px 20px;
 
   display: flex;
   flex-direction: column;
   align-items: center;
+
   overflow-y: scroll;
+
+  > div {
+    width: 100%;
+    max-width: 700px;
+    > h2 {
+      border-bottom: 2px solid ${({ theme }) => theme.color.postText};
+      padding: 30px 0 10px 0;
+      > span {
+        font-size: 1.2rem;
+        color: ${({ theme }) => theme.color.postText};
+      }
+    }
+  }
 `;
 
 const IconWrap = styled.div`

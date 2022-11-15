@@ -57,7 +57,7 @@ function Search() {
             onClick={() => {
               setSelectedTag({
                 tagTitle: one.tagTitle,
-                path: [],
+                path: one.postArr,
               });
             }}
           >

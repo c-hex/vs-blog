@@ -2,10 +2,10 @@ import React from "react";
 
 export default React.createContext({
   // 현재 선택된 게시물
-  selectedPost: "",
+  selectedPost: "test",
   setSelectedPost: () => {},
 
-  // 열려있는 게시물
+  // 열려 있는 게시물
   openPost: [],
   setOpenPost: () => {},
 
@@ -13,10 +13,10 @@ export default React.createContext({
   postData: [],
 
   // 테마 관련
-  theme: "",
-  setTheme: () => {},
+  theme: [],
+  setTheme: () => [],
 
   // 현재 선택된 태그
-  selectedTag: null,
+  selectTag: "",
   setSelectedTag: () => {},
 });
